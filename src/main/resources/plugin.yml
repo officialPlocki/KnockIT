@@ -1,0 +1,13 @@
+name: KnockIT
+version: 1.0
+main: xyz.plocki.knockit.KnockIT
+author: plocki
+api-version: 1.16
+prefix: KnockIT
+commands:
+  setlow:
+    description: Setzt die Todes-höhe
+  setheight:
+    description: Setzt die Kampf-höhe
+  setspawn:
+    description: Setzt den Spawn
