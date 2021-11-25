@@ -5,11 +5,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import xyz.plocki.knockit.KnockIT;
 import xyz.plocki.knockit.utils.LocationUtil;
 
@@ -26,14 +28,15 @@ public class BlockBuildListener implements Listener {
         }
         event.getPlayer().getItemInHand().setAmount(64);
 
-        ArmorStand armorStand = (ArmorStand) event.getPlayer().getWorld().spawnEntity(event.getPlayer().getLocation().clone().add(0,1,0), EntityType.ARMOR_STAND);
+        Entity entity = event.getBlock().getLocation().getWorld().spawnEntity(event.getBlock().getLocation().clone().add(0,1,0), EntityType.ARMOR_STAND, CreatureSpawnEvent.SpawnReason.CUSTOM);
+        ArmorStand armorStand = (ArmorStand) entity;
         armorStand.setVisible(false);
         armorStand.setCustomNameVisible(true);
         armorStand.setCollidable(false);
 
         AtomicDouble doub = new AtomicDouble(6);
 
-        int scheduler = Bukkit.getScheduler().scheduleAsyncRepeatingTask(KnockIT.getPlugin(), () -> {
+        int scheduler = Bukkit.getScheduler().scheduleSyncRepeatingTask(KnockIT.getPlugin(), () -> {
             if(doub.get() <= 0) {
                 armorStand.remove();
             }
@@ -50,7 +53,7 @@ public class BlockBuildListener implements Listener {
             Bukkit.getScheduler().cancelTask(scheduler);
         }, 122);
         Bukkit.getScheduler().scheduleSyncDelayedTask(KnockIT.getPlugin(), () -> {
-            event.getBlock().getLocation().getBlock().setType(Material.REDSTONE_BLOCK);
+            event.getBlock().getLocation().getBlock().setType(Material.RED_TERRACOTTA);
         }, 20*3);
         Bukkit.getScheduler().scheduleSyncDelayedTask(KnockIT.getPlugin(), () -> {
             event.getBlock().getLocation().getBlock().setType(Material.AIR);
